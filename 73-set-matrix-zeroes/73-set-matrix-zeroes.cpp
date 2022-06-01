@@ -22,6 +22,7 @@ public:
         int m = matrix.size();
         int n = matrix[0].size();
         
+        //Approach using additional space that keeps track of indices that have a zero
         vector<vector<int>> indices;
         
         for(int i = 0; i < matrix.size(); i++) {
@@ -34,15 +35,5 @@ public:
         for(int i = 0; i < indices.size(); i++) {
             make_zeroes(matrix, indices[i][0], indices[i][1], m, n);
         }
-//         vector<vector<bool>> visited(m, vector<bool>(n, false));
-        
-//         for(int i = 0; i < matrix.size(); i++) {
-//             for(int j = 0; j < matrix[i].size(); j++) {
-//                 if(matrix[i][j] == 0 && !visited[i][j]) {
-//                     visited[i][j] = true;
-//                     make_zeroes(matrix, visited, i, j, m, n);
-//                 }
-//             }
-//         }
     }
 };
