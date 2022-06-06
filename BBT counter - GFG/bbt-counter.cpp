@@ -41,3 +41,25 @@ int main() {
     return 0;
 }
   // } Driver Code Ends
+
+
+
+//Coding Ninjas
+#include<cmath>
+
+int balancedBTs(int n) {
+    // Write your code here
+    
+    long ans[n + 1];
+    
+    int mod = (int)pow(10, 9) + 7;
+    
+    ans[0] = 1;
+    ans[1] = 1;
+    for(int i = 2; i <= n; i++) {
+        ans[i] = (ans[i - 1] % mod * ((2 * ans [i - 2])%mod + ans[i - 1] % mod)) % mod;
+    }
+
+                  
+    return ans[n];
+}
