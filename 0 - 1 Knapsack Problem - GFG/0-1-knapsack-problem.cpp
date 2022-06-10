@@ -8,38 +8,22 @@ class Solution
 {
     public:
     //Function to return max value that can be put in knapsack of capacity W.
-    int knapsack(int* weights, int* values, int n, int W, int** mem) {
-        if(n == 0 || W <= 0)
-            return 0;
-            
-        if(mem[W][n] != -1)
-            return mem[W][n];
-        
-        if(W < weights[0]) {
-            mem[W][n] = knapsack(weights + 1, values + 1, n - 1, W, mem);
-        }
-        
-        else {
-            int x = values[0] + knapsack(weights + 1, values + 1, n - 1, W - weights[0], mem);
-            int y = knapsack(weights + 1, values + 1, n - 1, W, mem);
-            mem[W][n] = max(x, y);
-        }
-        
-        return mem[W][n];
-    }
-
-    int knapSack(int maxWeight, int weight[], int value[], int n) 
+    int knapSack(int W, int wt[], int val[], int n) 
     { 
        // Your code here
-       int **mem = new int*[maxWeight + 1];
-    
-        for(int i = 0; i < maxWeight + 1; i++) {
-            mem[i] = new int[n + 1];
-            for(int j = 0; j < n + 1; j++)
-                mem[i][j] = -1;
-        }
-    
-        return knapsack(weight, value, n, maxWeight, mem);
+       vector<vector<int>> dp(W + 1, vector<int>(n + 1, 0));
+       
+       for(int i = 1; i <= W; i++) {
+           for(int j = 1; j <= n; j++) {
+                if(wt[j - 1] > i)
+                    dp[i][j] = dp[i][j - 1];
+                else
+                    dp[i][j] = max(dp[i][j - 1], val[j - 1] + dp[i - wt[j - 1]][j - 1]);
+            
+           }
+       }
+       
+       return dp[W][n];
     }
 };
 
