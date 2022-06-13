@@ -1,26 +1,23 @@
 class Solution {
 public:
-    int total_helper(vector<vector<int>>& triangle, int r, int c, vector<vector<int>>& dp) {
-        //base case
-        if(r == triangle.size() - 1)
-            return triangle[r][c];
-        
-        if(c >= triangle[r].size())
-            return INT_MAX;
-        
-        if(dp[r][c] != -1)
-            return dp[r][c];
-        
-        int x = total_helper(triangle, r + 1, c, dp);
-        int y = total_helper(triangle, r + 1, c + 1, dp);
-            
-        dp[r][c] = triangle[r][c] + min(x, y);
-        return dp[r][c];
-    }
-    
     int minimumTotal(vector<vector<int>>& triangle) {
-        vector<vector<int>> dp(triangle.size(), vector<int>(triangle.size(), -1));
-        return total_helper(triangle, 0, 0, dp);
-    }
     
+        int n = triangle.size();
+        
+        vector<vector<int>> dp(n, vector<int>(n));
+        
+        for(int i = 0; i < triangle[n - 1].size(); i++) {
+            dp[n - 1][i] = triangle[n - 1][i];
+        }
+        
+        for(int i = n - 2; i >= 0; i--) {
+            for(int j = 0; j < triangle[i].size(); j++) {
+               
+                dp[i][j] = triangle[i][j] + min(dp[i + 1][j], dp[i + 1][j + 1]);
+                
+            }
+        }
+        
+        return dp[0][0];
+    }
 };
