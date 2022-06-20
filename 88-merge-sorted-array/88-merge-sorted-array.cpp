@@ -14,9 +14,10 @@ public:
         
         while(i < m && j < n) {
             if(nums1[i] >= nums2[j]) {
-                auto it = nums1.begin() + i;
-                nums1.insert(it, nums2[j]);
-                nums1.pop_back();
+                for(int k = nums1.size() - 1; k > i; k--) {
+                        nums1[k] = nums1[k - 1];
+                }
+                nums1[i] = nums2[j];
                 i++;
                 j++;
                 m++;
