@@ -25,47 +25,53 @@ public:
         if(sum < 0)
             return 0;
             
-        if(mem[sum][i] != -1)
-        return mem[sum][i];
+        if(mem[i][sum] != -1)
+        return mem[i][sum];
         
         if(arr[i] > sum)
-            mem[sum][i] = isSubsetSum_Helper(arr, sum, i + 1, mem);
+            mem[i][sum] = isSubsetSum_Helper(arr, sum, i + 1, mem);
+            
         else {
             int x = isSubsetSum_Helper(arr, sum - arr[i], i + 1, mem);
             int y = isSubsetSum_Helper(arr, sum, i + 1, mem);
             
-            mem[sum][i] = x || y;
+            mem[i][sum] = x || y;
         }
         
-        return mem[sum][i];
+        return mem[i][sum];
     
     }
     
-    bool isSubsetSum(vector<int>arr, int sum){
-        // code here 
-        if(sum == 0)
-        return 1;
-        
-        vector<vector<bool>> dp(arr.size() + 1, vector<bool>(sum + 1));
-        
-        for(int i = 0; i <= arr.size(); i++)
-            dp[i][0] = true;
-    
-        for(int i = 1; i <= sum; i++)
-            dp[0][i] = false;
-        
-        for(int i = 1; i <= arr.size(); i++) {
-            for(int j = 1; j <= sum; j++) {
-                if(arr[i - 1] > j) {
-                    dp[i][j] = dp[i - 1][j];
-                } else {
-                    dp[i][j] = dp[i - 1][j] || dp[i - 1][j - arr[i - 1]];
-                }
-            }
-        }
-        
-        return dp[arr.size()][sum];
+    bool isSubsetSum(vector<int> arr, int sum) {
+        vector<vector<int>> dp(arr.size() + 1, vector<int>(sum + 1, -1));
+        return isSubsetSum_Helper(arr, sum, 0, dp);
     }
+    
+    // bool isSubsetSum(vector<int>arr, int sum){
+    //     // code here 
+    //     if(sum == 0)
+    //     return 1;
+        
+    //     vector<vector<bool>> dp(arr.size() + 1, vector<bool>(sum + 1));
+        
+    //     for(int i = 0; i <= arr.size(); i++)
+    //         dp[i][0] = true;
+    
+    //     for(int i = 1; i <= sum; i++)
+    //         dp[0][i] = false;
+        
+    //     for(int i = 1; i <= arr.size(); i++) {
+    //         for(int j = 1; j <= sum; j++) {
+    //             if(arr[i - 1] > j) {
+    //                 dp[i][j] = dp[i - 1][j];
+    //             } else {
+    //                 dp[i][j] = dp[i - 1][j] || dp[i - 1][j - arr[i - 1]];
+    //             }
+    //         }
+    //     }
+        
+    //     return dp[arr.size()][sum];
+    // }
 };
 
 // { Driver Code Starts.
