@@ -21,35 +21,31 @@ public:
 class Solution {
 public:
     vector<vector<int>> levelOrder(Node* root) {
+    
+        vector<vector<int>> traversal;
         
         if(root == NULL)
-            return {};
-    
-        vector<vector<int>> traversal(1000);
+            return traversal;
         
         queue<Node*> nodes;
-        unordered_map<Node*, int> parent;
-        parent[root] = 0;
         nodes.push(root);
         
         while(!nodes.empty()) {
-            Node* n = nodes.front();
-            nodes.pop();
-            traversal[parent[n]].push_back(n -> val);
+            int size = nodes.size();
+            vector<int> temp;
+            for(int i = 0; i < size; i++) {
+                
+                Node* front = nodes.front();
+                nodes.pop();
+                temp.push_back(front -> val);
             
-            for(int i = 0; i < n->children.size(); i++) {
-                nodes.push(n -> children[i]);
-                parent[n -> children[i]] = parent[n] + 1;
+                for(int i = 0; i < front -> children.size(); i++) {
+                    nodes.push(front -> children[i]);
+                }
             }
+            
+            traversal.push_back(temp);
         }
-        
-        int i = 0;
-        for(i = 0; i < traversal.size(); i++) {
-            if(traversal[i].empty())
-                break;
-        }
-        
-        traversal.erase(traversal.begin() + i, traversal.end());
         
         return traversal;
     }
