@@ -13,24 +13,38 @@ class Solution {
 public:
     vector<vector<int>> levelOrder(TreeNode* root) {
         
-        if(!root) return {};
-        
         vector<vector<int>> ans;
-        levelOrder(root, 0, ans);
+        
+        if(!root)
+            return ans;
+        
+        queue<TreeNode*> nodes;
+        nodes.push(root);
+        unordered_map<TreeNode*, int> parent;
+        parent[root] = 0;
+        
+        while(!nodes.empty()) {
+            
+            TreeNode* front = nodes.front();
+            nodes.pop();
+                        
+            if(parent[front] == ans.size()) {
+                ans.push_back({front -> val});
+            } else {
+                ans[parent[front]].push_back(front -> val);
+            }
+             
+            if(front -> left) {
+                parent[front -> left] = parent[front] + 1;
+                nodes.push(front -> left);
+            }
+            
+            if(front -> right) {
+                parent[front -> right] = parent[front] + 1;
+                nodes.push(front -> right);
+            }
+        }
+        
         return ans;
-    }
-    
-    void levelOrder(TreeNode* node, int level, vector<vector<int>>& ans) {
-        if(level == ans.size())
-            ans.push_back({node -> val});
-        else
-            ans[level].push_back(node -> val);
-        
-        if(node -> left)
-            levelOrder(node -> left, level + 1, ans);
-        
-        if(node -> right)
-            levelOrder(node -> right, level + 1, ans);
-        
     }
 };
