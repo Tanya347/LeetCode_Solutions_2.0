@@ -13,22 +13,14 @@ class Solution {
 public:
     string tree2str(TreeNode* root) {
         
-        if(!root) 
-            return "";
+        string ans = to_string(root -> val);
+        if(root -> left)
+            ans += "(" + tree2str(root -> left) + ")";
         
-        string leftStr = tree2str(root -> left);
-        string rightStr = tree2str(root -> right);
-        
-        string ans;
-        
-        if(rightStr == "" && leftStr != "")
-            ans = to_string(root -> val) + "(" + leftStr + ")";
-        
-        else if(rightStr == "" && leftStr == "")
-            ans = to_string(root -> val);
-        
-        else
-            ans = to_string(root -> val) + "(" + leftStr + ")" + "(" + rightStr + ")";
+        if(root -> right) {
+            if(!root -> left) ans += "()";
+            ans += "(" + tree2str(root -> right) + ")";
+        }
         
         return ans;
     }
