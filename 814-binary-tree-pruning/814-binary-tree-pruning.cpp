@@ -12,19 +12,25 @@
 class Solution {
 public:
     TreeNode* pruneTree(TreeNode* root) {
-        if(!root) return NULL;
-        
-        TreeNode* leftSubt = pruneTree(root -> left);
-        TreeNode* rightSubt = pruneTree(root -> right);
-        
-        if(!leftSubt && !rightSubt && root -> val == 0) {
-            delete root;
-            return NULL;
-        }
-        
-        root -> left = leftSubt;
-        root -> right = rightSubt;
-        
-        return root;
+        return containsOne(root)? root : NULL;
     }
+    
+    bool containsOne(TreeNode* node) {
+        if(node == NULL) return false;
+        
+        // check whether any node in left subtree contains one
+        bool leftContains1 = containsOne(node -> left);
+        
+        // check whether any node in right subtree contains one
+        bool rightContains1 = containsOne(node -> right);
+        
+        // If the left subtree does not contain a 1, prune the subtree
+        if(!leftContains1) node -> left = NULL;
+        
+        // If the right subtree does not contain a 1, prune the subtree
+        if(!rightContains1) node -> right = NULL;
+        
+        // Return true if the current node, its left or right subtree contains 1
+        return node -> val == 1 || leftContains1 || rightContains1;
+    } 
 };
