@@ -1,34 +1,26 @@
 class Solution {
 public:
     
-    void colorBorder(vector<vector<int>>& grid, int row, int col) {
+    void colorBorderHelper(vector<vector<int>>& grid, int row, int col, int c) {
+        
+        if(row < 0 || col < 0 || row >= grid.size() || col >= grid[0].size() || grid[row][col] < 0 || grid[row][col] != c)
+            return;
         
         grid[row][col] = -grid[row][col];
-        int count = 0;
         
-        int arr[4][2] = {{-1,0},{1,0},{0,-1},{0,1}};
+        colorBorderHelper(grid, row + 1, col, c);
+        colorBorderHelper(grid, row, col + 1, c);
+        colorBorderHelper(grid, row - 1, col, c);
+        colorBorderHelper(grid, row, col - 1, c);
         
-        for(int i = 0; i < 4; i++) {
-            int x = row + arr[i][0];
-            int y = col + arr[i][1];
+        if(row > 0 && col > 0 && row < grid.size() - 1 && col < grid[row].size() - 1 && c == abs(grid[row - 1][col]) && c == abs(grid[row + 1][col]) && c == abs(grid[row][col - 1]) && c == abs(grid[row][col + 1]))
+            grid[row][col] = c;
             
-            if(x < 0 || y < 0 || x >= grid.size() || y >= grid[0].size())
-                continue;
-            
-            if(abs(grid[row][col]) == abs(grid[x][y])) {
-                count++;
-                if(grid[x][y] >= 0)
-                    colorBorder(grid, x, y);              
-            }
-        }
-        
-        if(count == 4)
-            grid[row][col] = -grid[row][col];
     }
     
     vector<vector<int>> colorBorder(vector<vector<int>>& grid, int row, int col, int color) {
         
-        colorBorder(grid, row, col);
+        colorBorderHelper(grid, row, col, grid[row][col]);
         
         for(int i = 0; i < grid.size(); i++) {
             for(int j = 0; j < grid[i].size(); j++) {
