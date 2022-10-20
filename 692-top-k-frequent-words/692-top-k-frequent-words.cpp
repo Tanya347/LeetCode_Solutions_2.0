@@ -1,41 +1,72 @@
 class Solution {
 public:
     
-    static bool cmp(pair<string, int>& a, pair<string, int>& b) {
-        if(a.second == b.second)           // if frequency are equal put lexicographically greater element on top
+    // comparator
+    
+    struct comparator
+    {
+        bool operator() (pair<int, string>& a, pair<int, string>& b)
+        {
+            if(a.first == b.first)           // if frequency are equal put lexicographically greater element on top
             {
-                return a.first < b.first;
+                return a.second < b.second;
             }
             else                            // if frequency are not equal put the elements on top which has less frequency
             {
-                return a.second > b.second;
+                return a.first > b.first;
             }
-    }
+        }
+    };
     
     vector<string> topKFrequent(vector<string>& words, int k) {
         
-        // finding the frequency of each word
-        unordered_map<string, int> freq;
-        for(int i = 0; i < words.size(); i++) {
-            freq[words[i]]++;
+        int n = words.size();
+        
+        // declare a map which store the frequency of words
+        
+        unordered_map<string, int> mp;
+        
+        for(auto word : words)
+        {
+            mp[word]++;
         }
         
-        // sorting according to the frequency
-        vector<pair<string, int>> f;
+        // declare a priority queue
         
-        for(auto &it : freq) {
-            f.push_back(it);   
+        priority_queue<pair<int, string>, vector<pair<int, string>>, comparator> pq;
+        
+        for(auto x : mp)
+        {
+            if(pq.size() < k)             // firstly push k elements into pq
+            {
+                pq.push({x.second, x.first});
+            }
+            else
+            {
+                if(pq.top().first < x.second || (pq.top().first == x.second && pq.top().second > x.first))
+                {
+                    pq.pop();
+                    
+                    pq.push({x.second, x.first});
+                }
+            }
         }
         
-        sort(f.begin(), f.end(), cmp);
+        // push all the elements from pq to res
         
-        // answer
-        vector<string> ans;
+        vector<string> res;
         
-        for(int i = 0; i < k; i++) {
-            ans.push_back(f[i].first);
+        while(!pq.empty())
+        {
+            res.push_back(pq.top().second);
+            
+            pq.pop();
         }
         
-        return ans;
+        // reverse the res
+        
+        reverse(res.begin(), res.end());
+        
+        return res;
     }
 };
