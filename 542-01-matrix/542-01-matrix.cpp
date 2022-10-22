@@ -1,43 +1,35 @@
 class Solution {
 public:
-    
-    bool check(vector<vector<int>>& mat, int i, int j) {
-        if(i < 0 || j < 0 || i >= mat.size() || j >= mat[i].size() || mat[i][j] >= 0)
-            return false;
-        return true;
-    }
-    
     vector<vector<int>> updateMatrix(vector<vector<int>>& mat) {
         
-        queue<pair<int, int>> cells;
+        int m = mat.size();
+        int n = mat[0].size();
         
-        for(int i = 0; i < mat.size(); i++) {
-            for(int j = 0; j < mat[i].size(); j++) {
-                if(mat[i][j] == 0)
-                    cells.push({i, j});
-                else
-                    mat[i][j] = -1;
-            }
-        }
+        vector<vector<int>> distance(m, vector<int>(n, INT_MAX - 1));
         
-        while(!cells.empty()) {
-            int i = cells.front().first;
-            int j = cells.front().second;
-            cells.pop();
-            
-            int arr[4][2] = {{-1, 0}, {1, 0}, {0, 1}, {0, -1}};
-            
-            for(int k = 0; k < 4; k++) {
-                int x = i + arr[k][0];
-                int y = j + arr[k][1];
-                if(check(mat, x, y)) {
-                    mat[x][y] = mat[i][j] + 1;
-                    cells.push({x, y});
+        for(int r = 0; r < m; r++) {
+            for(int c = 0; c < n; c++) {
+                if(mat[r][c] == 0) {
+                    distance[r][c] = 0;
+                    continue;
                 }
+                
+                if(r > 0)
+                    distance[r][c] = min(distance[r][c], distance[r - 1][c] + 1);
+                if(c > 0)
+                    distance[r][c] = min(distance[r][c], distance[r][c - 1] + 1);
             }
         }
         
-        return mat;
+        for(int r = m - 1; r >= 0; r--) {
+            for(int c = n - 1; c >= 0; c--) {
+                if(r != m - 1)
+                    distance[r][c] = min(distance[r][c], distance[r + 1][c] + 1);
+                if(c != n - 1)
+                    distance[r][c] = min(distance[r][c], distance[r][c + 1] + 1);
+            }
+        }
         
+        return distance;
     }
 };
