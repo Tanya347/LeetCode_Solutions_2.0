@@ -10,31 +10,60 @@
  */
 class Solution {
 public:
-    ListNode* reverseKGroup(ListNode* head, int k) {
-        ListNode* cursor = head;
-        
-        // for the case where less than k nodes are left
-        for(int i = 0; i < k; i++){
-            if(cursor == nullptr) return head;
-            cursor = cursor->next;
-        }
-        
-        // normal reverse function for k times
-        ListNode* curr = head;
-        ListNode* prev = nullptr;
-        ListNode* nxt = nullptr;
-        
-        for(int i = 0; i < k; i++){
-            nxt = curr->next;
-            curr->next = prev;
-            prev = curr;
-            curr = nxt;
-        }
-        
-        // receive whatever is reversed in head's next as it is the tail now
-        head->next = reverseKGroup(curr, k);
-        return prev;
+    ListNode *reverseLinkedList(ListNode *head, int k) {
     
+        // Write your code here
+        ListNode* c = head;
+        ListNode* n = NULL;
+        ListNode* p = NULL;
+
+        for(int i = 0; i < k; i++) {
+            n = c -> next;
+            c -> next = p;
+            p = c;
+            c = n;
+        }
+
+        return p;
+    }
+    
+    ListNode* reverseKGroup(ListNode* head, int k) {
+        
+        int i = 0;
+        ListNode* temp = head;
+        ListNode* prev = NULL;
+        ListNode* tempHead = NULL;
+        
+        while(temp != NULL) {
+            
+            // if i is zero i.e it is at start node then preserve it
+            if(i == 0)
+                tempHead = temp;
+            
+            // incement i which denotes node's curr number
+            i++;
+            
+            // if after incrementing it becomes then reverse
+            if(i == k) {
+                
+                ListNode* t = temp -> next;
+                temp = temp -> next;
+                ListNode* newHead = reverseLinkedList(tempHead, k);
+                
+                if(prev == NULL)
+                    head = newHead;
+                else
+                    prev -> next = newHead;
+                
+                tempHead -> next = t;
+                prev = tempHead;
+                i = 0;
+            }
+            else
+                temp = temp -> next;
+        }
+        
+        return head;
     }
 };
 
